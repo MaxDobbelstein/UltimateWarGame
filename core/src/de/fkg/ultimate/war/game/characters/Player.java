@@ -18,15 +18,18 @@ public class Player extends InputAdapter {
     private Texture texture;
     private TextureRegion[] frames;
     private float stateTime;
+    private Movement movement;
 
     public int xPosition = 300;
     public int yPosition = 100;
-
+    public int width;
+    public int height;
 
     public Player(){
         texture = new Texture(Gdx.files.internal(ASSETNAME));
-
-        TextureRegion[][] tmp = TextureRegion.split(texture, texture.getWidth()/COLS, texture.getHeight()/ROWS);
+        width = texture.getWidth()/COLS;
+        height = texture.getHeight()/ROWS;
+        TextureRegion[][] tmp = TextureRegion.split(texture, width, height);
         frames = new TextureRegion[COLS];
 
         for (int j = 0; j < COLS; j++)
@@ -34,9 +37,11 @@ public class Player extends InputAdapter {
 
         stanceAnimation = new Animation(0.1f, frames);
         stateTime = 0f;
+        movement = Movement.NOT;
     }
 
     public TextureRegion getCurrentFrame(float stateTime){
+        movement();
         this.stateTime += stateTime;
         return stanceAnimation.getKeyFrame(this.stateTime, true);
     }
@@ -45,9 +50,9 @@ public class Player extends InputAdapter {
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.LEFT)
-            xPosition -= 10;
+            movement = Movement.LEFT;
         if(keycode == Input.Keys.RIGHT)
-            xPosition += 10;
+            movement = Movement.RIGHT;
 
         return true;
 
@@ -55,13 +60,15 @@ public class Player extends InputAdapter {
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        movement = Movement.NOT;
+        return true;
     }
 
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
+    private void movement(){
+        if(movement == Movement.LEFT)
+            xPosition -= 4;
+        if(movement == Movement.RIGHT)
+            xPosition += 4;
     }
-
 
 }
