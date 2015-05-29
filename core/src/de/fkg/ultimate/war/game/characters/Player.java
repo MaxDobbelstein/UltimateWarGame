@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -40,10 +41,10 @@ public class Player extends InputAdapter {
         movement = Movement.NOT;
     }
 
-    public TextureRegion getCurrentFrame(float stateTime){
+    public Sprite getCurrentFrame(float stateTime){
         movement();
         this.stateTime += stateTime;
-        return stanceAnimation.getKeyFrame(this.stateTime, true);
+        return new Sprite(stanceAnimation.getKeyFrame(this.stateTime, true));
     }
 
 

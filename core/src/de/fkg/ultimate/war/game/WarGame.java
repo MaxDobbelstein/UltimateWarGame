@@ -8,7 +8,7 @@ public class WarGame extends Game {
 	
 	@Override
 	public void create () {
-		this.setScreen(new MainGameScreen(this));
+		this.setScreen(new MainGameScreen());
 	}
 
 	@Override
