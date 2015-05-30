@@ -14,9 +14,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Player extends InputAdapter {
     private final int ROWS = 1;
     private final int COLS = 8;
-    private final String ASSETNAME = "ogre-move.png";
-    private Animation stanceAnimation;
-    private Texture texture;
+    private static final String WALKING = "ogre-move.png";
+    private static final String ATTACKING = "ogre-attack-1.png";
+
+    private Animation animation;
+    private Texture walkingTexture;
+    private Texture attackingTexture;
     private TextureRegion[] frames;
     private float stateTime;
     private Movement movement;
@@ -27,16 +30,12 @@ public class Player extends InputAdapter {
     public int height;
 
     public Player(){
-        texture = new Texture(Gdx.files.internal(ASSETNAME));
-        width = texture.getWidth()/COLS;
-        height = texture.getHeight()/ROWS;
-        TextureRegion[][] tmp = TextureRegion.split(texture, width, height);
-        frames = new TextureRegion[COLS];
+        walkingTexture = new Texture(Gdx.files.internal(WALKING));
+        attackingTexture = new Texture(Gdx.files.internal(ATTACKING));
+        width = walkingTexture.getWidth()/COLS;
+        height = walkingTexture.getHeight()/ROWS;
 
-        for (int j = 0; j < COLS; j++)
-            frames[j] = tmp[0][j];
-
-        stanceAnimation = new Animation(0.1f, frames);
+        setAnimation(walkingTexture);
         stateTime = 0f;
         movement = Movement.NOT;
     }
@@ -44,7 +43,7 @@ public class Player extends InputAdapter {
     public Sprite getCurrentFrame(float stateTime){
         movement();
         this.stateTime += stateTime;
-        return new Sprite(stanceAnimation.getKeyFrame(this.stateTime, true));
+        return new Sprite(animation.getKeyFrame(this.stateTime, true));
     }
 
 
@@ -54,6 +53,8 @@ public class Player extends InputAdapter {
             movement = Movement.LEFT;
         if(keycode == Input.Keys.RIGHT)
             movement = Movement.RIGHT;
+        if(keycode == Input.Keys.SPACE)
+            setAnimation(attackingTexture);
 
         return true;
 
@@ -62,6 +63,8 @@ public class Player extends InputAdapter {
     @Override
     public boolean keyUp(int keycode) {
         movement = Movement.NOT;
+        if(keycode == Input.Keys.SPACE)
+            setAnimation(walkingTexture);
         return true;
     }
 
@@ -70,6 +73,16 @@ public class Player extends InputAdapter {
             xPosition -= 4;
         if(movement == Movement.RIGHT)
             xPosition += 4;
+    }
+
+    private void setAnimation(Texture currentTexture){
+        TextureRegion[][] tmp = TextureRegion.split(currentTexture, width, height);
+        frames = new TextureRegion[COLS];
+
+        for (int j = 0; j < COLS; j++)
+            frames[j] = tmp[0][j];
+
+        animation = new Animation(0.1f, frames);
     }
 
 }
