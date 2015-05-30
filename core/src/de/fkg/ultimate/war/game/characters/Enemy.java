@@ -19,8 +19,7 @@ public class Enemy implements Pool.Poolable {
     public Vector2 position;
     public boolean alive;
     public int width, height;
-    
-    
+
     protected Animation stanceAnimation;
     protected Texture texture;
     protected TextureRegion[] frames;
