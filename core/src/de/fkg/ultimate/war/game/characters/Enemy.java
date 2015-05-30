@@ -16,28 +16,20 @@ import com.badlogic.gdx.utils.Pool;
  * @author alex
  */
 public class Enemy implements Pool.Poolable {
-    public Vector2 position;
     public boolean alive;
-    public int width, height;
-
-    protected Animation stanceAnimation;
-    protected Texture texture;
-    protected TextureRegion[] frames;
-    protected float stateTime;
-
+    public Character character;
     /**
      * Bullet constructor. Just initialize variables.
      */
     public Enemy() {
-        this.position = new Vector2();
         this.alive = false;
     }
 
     /**
      * Initialize the bullet. Call this method after getting a bullet from the pool.
      */
-    public void init(float posX, float posY) {
-        position.set(posX,  posY);
+    public void init(Character character) {
+        this.character = character;
         alive = true;
     }
 
@@ -47,7 +39,6 @@ public class Enemy implements Pool.Poolable {
      */
     @Override
     public void reset() {
-        position.set(0,0);
         alive = false;
     }
 
@@ -57,7 +48,8 @@ public class Enemy implements Pool.Poolable {
     public void update (float delta) {
 
         // update bullet position
-        position.add(1*delta*60, 1*delta*60);
+        character.xPosition += 1*delta*60;
+        character.yPosition += 1*delta*60;
 
         // if bullet is out of screen, set it to dead
         // if (isOutOfScreen()) alive = false;

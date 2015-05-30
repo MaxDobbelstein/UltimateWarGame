@@ -1,15 +1,12 @@
 package de.fkg.ultimate.war.game.characters;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
  * Created by mkvr on 28.05.15.
  */
-public class Player extends InputAdapter {
+public class Player extends Character{
     private final int MOVEMENT_ROWS = 1;
     private final int MOVEMENT_COLS = 8;
     private final int DYING_ROWS = 8;
@@ -20,39 +17,40 @@ public class Player extends InputAdapter {
     private Texture walkingTexture;
     private Texture attackingTexture;
     private Texture dyingTexture;
-    private Character character;
 
-    public Player(){
+
+    public Player(int initialX, int initialY){
+        this.xPosition = initialX;
+        this.yPosition = initialY;
+        stateTime = 0f;
+
         walkingTexture = new Texture(Gdx.files.internal(WALKING));
         attackingTexture = new Texture(Gdx.files.internal(ATTACKING));
         dyingTexture = new Texture(Gdx.files.internal(DYING));
 
-        character = new Character(100, 300);
-        character.setAnimation(walkingTexture, MOVEMENT_COLS, MOVEMENT_ROWS);
-        character.movement = Movement.NOT;
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.LEFT)
-            character.movement = Movement.LEFT;
-        if(keycode == Input.Keys.RIGHT)
-            character.movement = Movement.RIGHT;
-        if(keycode == Input.Keys.SPACE)
-            character.setAnimation(attackingTexture, MOVEMENT_COLS, MOVEMENT_ROWS);
-
-        return true;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        character.movement = Movement.NOT;
-        if(keycode == Input.Keys.SPACE)
-            character.setAnimation(walkingTexture, MOVEMENT_COLS, MOVEMENT_ROWS);
-        return true;
+        setAnimation(walkingTexture, MOVEMENT_COLS, MOVEMENT_ROWS);
+        movement = Movement.NOT;
     }
 
     public void die(){
-        character.setAnimation(dyingTexture, DYING_COLS, DYING_ROWS);
+        setAnimation(dyingTexture, DYING_COLS, DYING_ROWS);
+    }
+
+    public void attack(){
+        setAnimation(attackingTexture,MOVEMENT_COLS, MOVEMENT_ROWS);
+    }
+
+    //TODO: remember previous animation to avoid unnecessary setting of a new animation
+    public void walk(){
+        movement = Movement.NOT;
+        setAnimation(walkingTexture, MOVEMENT_COLS, MOVEMENT_ROWS);
+    }
+
+    public void strafeLeft(){
+        movement = Movement.LEFT;
+    }
+
+    public void strafeRight(){
+        movement = Movement.RIGHT;
     }
 }

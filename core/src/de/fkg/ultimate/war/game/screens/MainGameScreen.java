@@ -17,8 +17,9 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import de.fkg.ultimate.war.game.characters.EnemyOgre;
-import de.fkg.ultimate.war.game.characters.Player;
+import de.fkg.ultimate.war.game.characters.*;
+import de.fkg.ultimate.war.game.characters.Character;
+import de.fkg.ultimate.war.game.de.fkg.ultimate.war.game.input.DesktopInput;
 import java.util.Random;
 
 /**
@@ -32,21 +33,22 @@ public class MainGameScreen implements Screen {
     private Player player;
     private int scrollTrack = 0;
     
-    private final Array<EnemyOgre> activeEnemyOgres = new Array<EnemyOgre>();
+    private final Array<Enemy> activeEnemies;
 
     // bullet pool.
-    private final Pool<EnemyOgre> enemyOgrePool = new Pool<EnemyOgre>() {
-    @Override
-    protected EnemyOgre newObject() {
-        return new EnemyOgre();
-    }
+    private final Pool<Enemy> enemyPool = new Pool<Enemy>() {
+        @Override
+        protected Enemy newObject() {
+            return new Enemy();
+        }
     };
 
 
     public MainGameScreen(){
         batch = new SpriteBatch();
-        player = new Player();
-        Gdx.input.setInputProcessor(player);
+        player = new Player(100, 300);
+        activeEnemies = new Array<Enemy>();
+        Gdx.input.setInputProcessor(new DesktopInput(player));
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
@@ -86,18 +88,19 @@ public class MainGameScreen implements Screen {
     }
     
     private void spawnEnemy(){
-        EnemyOgre mob = enemyOgrePool.obtain();
+        Enemy mob = enemyPool.obtain();
         Random r = new Random();
-        mob.init(r.nextInt(Gdx.graphics.getWidth())-mob.width, Gdx.graphics.getHeight());
-        activeEnemyOgres.add(mob);
+        Character character = new EnemyOgre(r.nextInt(Gdx.graphics.getWidth())-64, Gdx.graphics.getHeight()-64);
+        mob.init(character);
+        activeEnemies.add(mob);
     }
     
     private void drawEnemies(float delta){
-        for(EnemyOgre enemy : activeEnemyOgres){
-            Sprite enemySprite = enemy.getCurrentFrame(delta);
+        for(Enemy enemy : activeEnemies){
+            Sprite enemySprite = enemy.character.getCurrentFrame(delta);
             enemySprite.flip(false, true);
-            enemy.position.y -= 2;
-            batch.draw(enemySprite, enemy.position.x, enemy.position.y);
+            enemy.character.yPosition -= 2;
+            batch.draw(enemySprite, enemy.character.xPosition, enemy.character.xPosition);
         }
     }
 
@@ -120,8 +123,9 @@ public class MainGameScreen implements Screen {
 
     private void detectEnemyCollision(){
         Rectangle playerRectangle = new Rectangle(player.xPosition, player.yPosition + scrollTrack, player.width, player.height);
-        for(EnemyOgre enemy : activeEnemyOgres){
-            Rectangle enemyRectangle = new Rectangle(enemy.position.x, enemy.position.y + scrollTrack, enemy.width, enemy.height);
+        for(Enemy enemy : activeEnemies){
+            Rectangle enemyRectangle = new Rectangle(enemy.character.xPosition, enemy.character.yPosition + scrollTrack,
+                    enemy.character.width, enemy.character.height);
             if (Intersector.overlaps(enemyRectangle, playerRectangle)) {
                 player.die();
             }        

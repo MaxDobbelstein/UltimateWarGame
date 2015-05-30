@@ -16,17 +16,16 @@ import java.util.Random;
  *
  * @author alex
  */
-public class EnemyOgre extends Enemy{
+public class EnemyOgre extends Character{
     private final int ROWS = 1;
     private final int COLS = 8;
     private final String WALKING = "ogre-move.png";
     private Texture walkingTexture;
-    private Character character;
     
     public EnemyOgre(int initialX, int initialY){
+        this.xPosition = initialX;
+        this.yPosition = initialY;
         walkingTexture = new Texture(Gdx.files.internal(WALKING));
-        character = new Character(initialX, initialY);
-        character.setAnimation(walkingTexture, COLS, ROWS);
+        setAnimation(walkingTexture, COLS, ROWS);
     }
-    
 }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 /**
  * Created by mkvr on 30.05.15.
  */
-public class Character {
+public abstract class Character {
     public int width;
     public int height;
     public int xPosition;
@@ -17,13 +17,7 @@ public class Character {
 
     private TextureRegion[] frames;
     private Animation animation;
-    private float stateTime;
-
-    public Character(int initialX, int initialY) {
-        this.xPosition = initialX;
-        this.yPosition = initialY;
-        stateTime = 0f;
-    }
+    protected float stateTime;
 
     public void setAnimation(Texture currentTexture, int cols, int rows) {
         width = currentTexture.getWidth() / cols;
