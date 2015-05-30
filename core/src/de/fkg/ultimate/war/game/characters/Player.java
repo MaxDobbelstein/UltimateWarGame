@@ -35,8 +35,6 @@ public class Player extends InputAdapter {
         walkingTexture = new Texture(Gdx.files.internal(WALKING));
         attackingTexture = new Texture(Gdx.files.internal(ATTACKING));
         dyingTexture = new Texture(Gdx.files.internal(DYING));
-        width = walkingTexture.getWidth()/COLS;
-        height = walkingTexture.getHeight()/ROWS;
 
         setAnimation(walkingTexture, COLS, ROWS);
         stateTime = 0f;
@@ -79,6 +77,9 @@ public class Player extends InputAdapter {
     }
 
     private void setAnimation(Texture currentTexture, int cols, int rows){
+        width = currentTexture.getWidth()/cols;
+        height = currentTexture.getHeight()/rows;
+
         TextureRegion[][] tmp = TextureRegion.split(currentTexture, width, height);
         frames = new TextureRegion[rows*cols];
 
@@ -91,7 +92,7 @@ public class Player extends InputAdapter {
     }
     
     public void die(){
-        setAnimation(walkingTexture, 4, 8);
+        setAnimation(dyingTexture, 4, 8);
     }
 
 }
