@@ -110,7 +110,9 @@ public class MainGameScreen implements Screen {
         for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
             Rectangle rectangle = rectangleObject.getRectangle();
             if (Intersector.overlaps(rectangle, playerRectangle)) {
-                player.xPosition += 10;
+                player.yPosition--;
+                if(player.yPosition == 0)
+                    player.die();
             }
         }
         detectEnemyCollision();
@@ -121,7 +123,7 @@ public class MainGameScreen implements Screen {
         for(EnemyOgre enemy : activeEnemyOgres){
             Rectangle enemyRectangle = new Rectangle(enemy.position.x, enemy.position.y + scrollTrack, enemy.width, enemy.height);
             if (Intersector.overlaps(enemyRectangle, playerRectangle)) {
-                player.xPosition -= 20;
+                player.die();
             }        
         }
     }

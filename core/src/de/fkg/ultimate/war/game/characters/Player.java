@@ -16,10 +16,12 @@ public class Player extends InputAdapter {
     private final int COLS = 8;
     private static final String WALKING = "ogre-move.png";
     private static final String ATTACKING = "ogre-attack-1.png";
+    private static final String DYING = "ogre-death.png";
 
     private Animation animation;
     private Texture walkingTexture;
     private Texture attackingTexture;
+    private Texture dyingTexture;
     private TextureRegion[] frames;
     private float stateTime;
     private Movement movement;
@@ -32,10 +34,11 @@ public class Player extends InputAdapter {
     public Player(){
         walkingTexture = new Texture(Gdx.files.internal(WALKING));
         attackingTexture = new Texture(Gdx.files.internal(ATTACKING));
+        dyingTexture = new Texture(Gdx.files.internal(DYING));
         width = walkingTexture.getWidth()/COLS;
         height = walkingTexture.getHeight()/ROWS;
 
-        setAnimation(walkingTexture);
+        setAnimation(walkingTexture, COLS, ROWS);
         stateTime = 0f;
         movement = Movement.NOT;
     }
@@ -54,7 +57,7 @@ public class Player extends InputAdapter {
         if(keycode == Input.Keys.RIGHT)
             movement = Movement.RIGHT;
         if(keycode == Input.Keys.SPACE)
-            setAnimation(attackingTexture);
+            setAnimation(attackingTexture, COLS, ROWS);
 
         return true;
 
@@ -64,7 +67,7 @@ public class Player extends InputAdapter {
     public boolean keyUp(int keycode) {
         movement = Movement.NOT;
         if(keycode == Input.Keys.SPACE)
-            setAnimation(walkingTexture);
+            setAnimation(walkingTexture, COLS, ROWS);
         return true;
     }
 
@@ -75,14 +78,20 @@ public class Player extends InputAdapter {
             xPosition += 4;
     }
 
-    private void setAnimation(Texture currentTexture){
+    private void setAnimation(Texture currentTexture, int cols, int rows){
         TextureRegion[][] tmp = TextureRegion.split(currentTexture, width, height);
-        frames = new TextureRegion[COLS];
+        frames = new TextureRegion[rows*cols];
 
-        for (int j = 0; j < COLS; j++)
-            frames[j] = tmp[0][j];
-
+        int animIndex = 0;
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                frames[animIndex++] = tmp[i][j];
+        
         animation = new Animation(0.1f, frames);
+    }
+    
+    public void die(){
+        setAnimation(walkingTexture, 4, 8);
     }
 
 }
