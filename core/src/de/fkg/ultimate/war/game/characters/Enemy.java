@@ -49,7 +49,7 @@ public class Enemy implements Pool.Poolable {
 
         // update bullet position
         character.xPosition += 1*delta*60;
-        character.yPosition += 1*delta*60;
+        character.yPosition -= -2*delta*60;
 
         // if bullet is out of screen, set it to dead
         // if (isOutOfScreen()) alive = false;

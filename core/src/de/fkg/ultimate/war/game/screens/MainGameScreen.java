@@ -100,7 +100,8 @@ public class MainGameScreen implements Screen {
             Sprite enemySprite = enemy.character.getCurrentFrame(delta);
             enemySprite.flip(false, true);
             enemy.character.yPosition -= 2;
-            batch.draw(enemySprite, enemy.character.xPosition, enemy.character.xPosition);
+            enemy.update(delta);
+            batch.draw(enemySprite, enemy.character.xPosition, enemy.character.yPosition);
         }
     }
 

@@ -19,6 +19,18 @@ public class DesktopInput extends InputAdapter{
 
     @Override
     public boolean keyDown(int keycode) {
+        switch(keycode) {
+            case Input.Keys.LEFT:
+                player.strafeLeft();
+                break;
+            case Input.Keys.RIGHT:
+                player.strafeRight();
+                break;
+            case Input.Keys.SPACE:
+                player.attack();
+                break;             
+        }
+
         if(keycode == Input.Keys.LEFT)
             player.strafeLeft();
         if(keycode == Input.Keys.RIGHT)
