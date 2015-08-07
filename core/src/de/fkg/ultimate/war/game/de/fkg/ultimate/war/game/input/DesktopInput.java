@@ -28,16 +28,9 @@ public class DesktopInput extends InputAdapter{
                 break;
             case Input.Keys.SPACE:
                 player.attack();
-                break;             
+                break;
         }
-
-        if(keycode == Input.Keys.LEFT)
-            player.strafeLeft();
-        if(keycode == Input.Keys.RIGHT)
-            player.strafeRight();
-        if(keycode == Input.Keys.SPACE)
-            player.attack();
-
+        
         return true;
     }
 
