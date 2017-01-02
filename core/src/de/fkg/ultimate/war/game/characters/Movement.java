@@ -6,5 +6,7 @@ package de.fkg.ultimate.war.game.characters;
 public enum Movement {
     LEFT,
     RIGHT,
+    UP,
+    DOWN,
     NOT
 }

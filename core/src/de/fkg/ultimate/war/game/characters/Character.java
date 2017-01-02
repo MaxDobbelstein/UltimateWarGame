@@ -45,5 +45,9 @@ public abstract class Character {
             xPosition -= 4;
         if (movement == Movement.RIGHT)
             xPosition += 4;
+        if(movement == Movement.UP)
+            yPosition += 4;
+        if(movement == Movement.DOWN)
+            yPosition -= 4;
     }
 }

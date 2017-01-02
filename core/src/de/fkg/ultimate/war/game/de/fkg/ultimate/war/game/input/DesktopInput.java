@@ -14,17 +14,24 @@ public class DesktopInput extends InputAdapter{
         this.player = player;
     }
 
-
-
-
     @Override
     public boolean keyDown(int keycode) {
         switch(keycode) {
             case Input.Keys.LEFT:
                 player.strafeLeft();
+                player.walk();
                 break;
             case Input.Keys.RIGHT:
                 player.strafeRight();
+                player.walk();
+                break;
+            case Input.Keys.UP:
+                player.moveUp();
+                player.walk();
+                break;
+            case Input.Keys.DOWN:
+                player.moveDown();
+                player.walk();
                 break;
             case Input.Keys.SPACE:
                 player.attack();
@@ -39,5 +46,4 @@ public class DesktopInput extends InputAdapter{
         player.walk();
         return true;
     }
-
 }

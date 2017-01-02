@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 /**
  * Created by mkvr on 28.05.15.
  */
-public class Player extends Character{
+public class Player extends Character {
     private final int MOVEMENT_ROWS = 1;
     private final int MOVEMENT_COLS = 8;
     private final int DYING_ROWS = 8;
@@ -19,7 +19,7 @@ public class Player extends Character{
     private Texture dyingTexture;
 
 
-    public Player(int initialX, int initialY){
+    public Player(int initialX, int initialY) {
         this.xPosition = initialX;
         this.yPosition = initialY;
         stateTime = 0f;
@@ -32,25 +32,54 @@ public class Player extends Character{
         movement = Movement.NOT;
     }
 
-    public void die(){
+    public void die() {
         setAnimation(dyingTexture, DYING_COLS, DYING_ROWS);
     }
 
-    public void attack(){
-        setAnimation(attackingTexture,MOVEMENT_COLS, MOVEMENT_ROWS);
+    public void attack() {
+        setAnimation(attackingTexture, MOVEMENT_COLS, MOVEMENT_ROWS);
     }
 
     //TODO: remember previous animation to avoid unnecessary setting of a new animation
-    public void walk(){
+    public void walk() {
         movement = Movement.NOT;
         setAnimation(walkingTexture, MOVEMENT_COLS, MOVEMENT_ROWS);
     }
 
-    public void strafeLeft(){
-        movement = Movement.LEFT;
+    public void strafeLeft() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                movement = Movement.LEFT;
+            }
+        }).start();
     }
 
-    public void strafeRight(){
-        movement = Movement.RIGHT;
+    public void strafeRight() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                movement = Movement.RIGHT;
+            }
+        }).start();
+
+    }
+
+    public void moveUp() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                movement = Movement.UP;
+            }
+        }).start();
+    }
+
+    public void moveDown() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                movement = Movement.DOWN;
+            }
+        }).start();
     }
 }
